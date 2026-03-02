@@ -274,7 +274,7 @@ chrome.storage.onChanged.addListener((changes, areaName) => {
   }
 })
 
-// ✨ NEW: Flush all pending updates when popup closes
+// Flush all pending updates when popup closes
 chrome.runtime.onConnect.addListener((port) => {
   if (port.name === 'popup') {
     console.log('[Background] Popup connected')

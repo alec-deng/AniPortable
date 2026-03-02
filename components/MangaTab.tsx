@@ -72,6 +72,7 @@ export const MangaTab: React.FC = () => {
     skip: !userId
   })
 
+  // Only refetch if there's no cache or it's marked dirty
   useEffect(() => {
     if (!userId) return
     if (mangaList && !mangaDirty) return
