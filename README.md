@@ -56,6 +56,7 @@ AniPortable requests the following Chrome Extension permissions:
 
 - **storage** – Persists user settings and preferences locally.
 - **identity** – Used to authenticate users through AniList via `chrome.identity.launchWebAuthFlow`.
+- **host_permissions** (`https://graphql.anilist.co/`) – Allows the background script to call the AniList GraphQL API directly.
 
 These are minimal and used solely to deliver core functionality securely and privately.
 
