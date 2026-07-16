@@ -1,4 +1,4 @@
-import { AUTH_CONFIG } from "./config/auth.config"
+export {}
 
 // ============================================
 // Storage Management
@@ -179,12 +179,24 @@ restorePendingUpdates()
 // Authentication
 // ============================================
 class Auth {
-  static CLIENT_ID = AUTH_CONFIG.clientId
+  // Set via .env.development (npx plasmo dev) / .env.production (npx plasmo build)
+  static CLIENT_ID = process.env.PLASMO_PUBLIC_ANILIST_CLIENT_ID
 
   static async login() {
+    if (!this.CLIENT_ID) {
+      throw new Error(
+        "Missing PLASMO_PUBLIC_ANILIST_CLIENT_ID. Copy .env.example to .env.development (or .env.production) and set your AniList client_id."
+      )
+    }
+
     const authUrl = new URL("https://anilist.co/api/v2/oauth/authorize")
-    authUrl.searchParams.append("client_id", this.CLIENT_ID.toString())
+    authUrl.searchParams.append("client_id", this.CLIENT_ID)
     authUrl.searchParams.append("response_type", "token")
+    // Cache-bust: if the user closes/cancels the auth window, Chrome can fail
+    // a subsequent launchWebAuthFlow call immediately ("Authorization page
+    // could not be loaded") when given the exact same URL as the cancelled
+    // attempt. A unique state param forces each attempt to be treated as new.
+    authUrl.searchParams.append("state", crypto.randomUUID())
 
     let redirectUrl: string | undefined
 
